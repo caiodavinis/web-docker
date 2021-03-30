@@ -10,7 +10,7 @@ services:
     ports: 
       - "80:80"
     volumes:
-      - ../.:/var/www/html/
+      - .:/var/www/html/
     depends_on:
       - db
     networks:
@@ -25,7 +25,7 @@ services:
       MYSQL_PASSWORD: senhadousuario
       MYSQL_ROOT_PASSWORD: senhadousuario
     volumes:
-      - ./mysql/dump:/docker-entrypoint-initdb.d
+      - ./docker-images/mysql/dump:/docker-entrypoint-initdb.d
       - dados:/var/lib/mysql
     networks:
       - banco
