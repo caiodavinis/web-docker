@@ -1,0 +1,44 @@
+version: '3'
+volumes:
+  dados:
+networks:
+  banco:
+  web:
+services:
+  wwww:
+    build: ./docker-images/wwww
+    ports: 
+      - "80:80"
+    volumes:
+      - ../.:/var/www/html/
+    depends_on:
+      - db
+    networks:
+      - web
+  db:
+    build: ./docker-images/mysql
+    ports: 
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: pga_lab
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: senhadousuario
+      MYSQL_ROOT_PASSWORD: senhadousuario
+    volumes:
+      - ./mysql/dump:/docker-entrypoint-initdb.d
+      - dados:/var/lib/mysql
+    networks:
+      - banco
+  phpmyadmin:
+    build: ./docker-images/phpmyadmin
+    links: 
+      - db:db
+    ports:
+      - 80:80
+    environment:
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: senhadousuario
+      MYSQL_ROOT_PASSWORD: senhadousuario
+    networks:
+      - banco
+      - web
