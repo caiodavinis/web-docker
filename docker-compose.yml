@@ -5,18 +5,22 @@ networks:
   banco:
   web:
 services:
-  wwww:
-    build: ./docker-images/wwww
+  www:
+    build: 
+      context: .
+      dockerfile: ./docker-images/www/Dockerfile
     ports: 
-      - "80:80"
+      - "8080:80"
     volumes:
-      - .:/var/www/html/
+      - .:/var/www/html
     depends_on:
       - db
     networks:
       - web
   db:
-    build: ./docker-images/mysql
+    build: 
+      context: .
+      dockerfile: ./docker-images/mysql/Dockerfile
     ports: 
       - "3306:3306"
     environment:
@@ -30,11 +34,11 @@ services:
     networks:
       - banco
   phpmyadmin:
-    build: ./docker-images/phpmyadmin
-    links: 
-      - db:db
-    ports:
-      - 80:80
+    build: 
+      context: .
+      dockerfile:  ./docker-images/phpmyadmin/Dockerfile
+    volumes:
+      - dados
     environment:
       MYSQL_USER: usuario
       MYSQL_PASSWORD: senhadousuario
